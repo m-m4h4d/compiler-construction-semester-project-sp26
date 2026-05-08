@@ -26,6 +26,7 @@ class Lexer:
     }
 
     token_specification = [
+        ('INVALID_ID', r'\d+[A-Za-z_][A-Za-z0-9_]*'), # Identifiers starting with a number (invalid)
         ('NUMBER',   r'\d+(\.\d*)?'),      # Integer or decimal number
         ('ID',       r'[A-Za-z_][A-Za-z0-9_]*'), # Identifiers
         ('EQ',       r'=='),
@@ -71,7 +72,9 @@ class Lexer:
             value = mo.group()
             column = mo.start() - line_start
             
-            if kind == 'NUMBER':
+            if kind == 'INVALID_ID':
+                raise LexerError(f"Invalid identifier '{value}' on line {line_num}")
+            elif kind == 'NUMBER':
                 # Check if float or int
                 if '.' in value:
                     value = float(value)

@@ -48,12 +48,16 @@ if __name__ == '__main__':
     with open(sys.argv[1], 'r') as f:
         source_code = f.read()
         
-    tac, llvm = compile_c_code(source_code)
-    
-    with open('output.tac', 'w') as f:
-        f.write("\n".join(tac))
-    print("\nTAC written to output.tac")
-    
-    with open('output.ll', 'w') as f:
-        f.write(llvm)
-    print("LLVM IR written to output.ll")
+    try:
+        tac, llvm = compile_c_code(source_code)
+        
+        with open('output.tac', 'w') as f:
+            f.write("\n".join(tac))
+        print("\nTAC written to output.tac")
+        
+        with open('output.ll', 'w') as f:
+            f.write(llvm)
+        print("LLVM IR written to output.ll")
+    except Exception as e:
+        print(f"\nCompiler Error: {e}")
+        sys.exit(1)
